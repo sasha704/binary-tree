@@ -39,10 +39,20 @@ removeBranch value (Branch left right branchValue) =
                 else -- (the left side has values)
                     if right == None
                         then left -- (only left has values)
-                    else (Branch left right  -- (both sides have values)
-                    --- UNFINISHED
+                    else -- (both sides have values)
+                        let replacement = lowest right in
+                        let newRight = removeBranch replacement right in
+                        (Branch left newRight replacement)
                         
         else
             if value > branchValue -- if the value is bigger than the node
                 then Branch left (removeBranch value right) -- search right
             else Branch (removeBranch value left) right -- else search left
+
+
+-- get the lowest value from a sorted tree
+lowest :: Tree -> Int
+lowest (Branch left right value) =
+    if left == None
+        then value
+    else lowest left
