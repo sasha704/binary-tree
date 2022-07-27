@@ -3,12 +3,15 @@ data Tree = Branch Tree Tree Int
           | None
           deriving (Eq, Show)
 
--- add a value to the tree
+-- Add a value to the tree
 addBranch :: Int -> Tree -> Tree
 -- if there are no values in the tree already, just add the value as the root node
 addBranch newValue (None) = Branch None None newValue
 -- if there are values in the tree already, add a new branch accordingly
---addBranch newValue (Branch left right branchValue) =  
+addBranch newValue (Branch left right branchValue) =  
+    if newValue > branchValue
+        then Branch left (addBranch newValue right) branchValue
+    else Branch (addBranch newValue left) right branchValue
 
 
 -- Check if an integer is already in a tree
@@ -22,7 +25,7 @@ findValue searchValue (Branch left right branchValue) =
             then findValue searchValue right -- search right
         else findValue searchValue left -- else search left
 
-
+-- Remove a value from the tree
 removeBranch :: Int -> Tree -> Tree
 removeBranch value (Branch left right branchValue) =
         if value == branchValue -- if the current node is the right one
